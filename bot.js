@@ -13,9 +13,9 @@ class MrRobot extends ActivityHandler {
 
         // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
         this.onMessage(async (context, next) => {
-            const reference = context.getConversationReference(context.request);
+            // const reference = context.getConversationReference(context.request);
 
-            await context.sendActivity(reference);
+            // await context.sendActivity(reference);
 
             const text = context.activity.text.trim();
             if (text === 'join') {
