@@ -20,11 +20,11 @@ module.exports.setup = (app) => {
         if (text === 'join') {
             session.send(`Oh! So you'd like to become an operator. Thank you so much for helping me out :)`);
         } else if (text === 'leave') {
-            session.send(`Awww...see ya next time!'`);
+            session.send(`Awww...see ya next time!`);
         } else if (text === 'vote') {
-            session.send(`Hmm who hasn't been a good operator?'`);
+            session.send(`Hmm who hasn't been a good operator?`);
         } else {
-            session.send(`beep boop.'`);
+            session.send(`beep boop.`);
         }
     });
 
