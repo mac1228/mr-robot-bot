@@ -17,7 +17,8 @@ module.exports.setup = (app) => {
 
     const bot = new builder.UniversalBot(connector, (session) => {
 
-        var text = teams.TeamsMessage.getTextWithoutMentions(session.message);
+        let message = session.message;
+        let text = teams.TeamsMessage.getTextWithoutMentions(message);
 
         if (text === 'join') {
             session.send(`Oh! So you'd like to become an operator. Thank you so much for helping me out :)`);
@@ -44,7 +45,7 @@ module.exports.setup = (app) => {
                 useAuth: true
             }
 
-            var msg = new builder.Message().address(address);
+            let msg = new builder.Message().address(address);
             msg.text('Hello, this is a notification');
             bot.send(msg);
         } else if (text === 'reset') {
@@ -53,6 +54,18 @@ module.exports.setup = (app) => {
             session.conversationData = {};
             session.privateConversationData = {};
             session.save().sendBatch();
+
+            let conversationUpdateEvent = {
+                type: "conversationUpdate",
+                agent: message.agent,
+                source: message.source,
+                sourceEvent: message.sourceEvent,
+                user: message.user,
+                address: message.address,
+                timestamp: message.timestamp,
+                membersAdded: [ message.address.user, message.address.bot ],
+            };
+            this.bot.receive(conversationUpdateEvent);
         } else {
             session.send(`beep boop.`);
         }
