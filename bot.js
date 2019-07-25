@@ -3,10 +3,11 @@
 module.exports.setup = (app) => {
     const builder = require('botbuilder');
     const teams = require('botbuilder-teams');
+    const BOT_APP_ID = process.env.MicrosoftAppId;
 
     // Create a connector to handle the conversations
     const connector = new teams.TeamsChatConnector({
-        appId: process.env.MicrosoftAppId,
+        appId: BOT_APP_ID,
         appPassword: process.env.MicrosoftAppPassword,
         openIdMetadata: process.env.BotOpenIdMetadata
     });
@@ -25,6 +26,21 @@ module.exports.setup = (app) => {
             session.send(`Hmm who hasn't been a good operator?`);
         } else {
             session.send(`beep boop.`);
+        }
+    });
+
+    bot.on('conversationUpdate', (msg) => {
+        var members = msg.membersAdded;
+        // Loop through all members that were just added to the team
+        for (var i = 0; i < members.length; i++) {
+            // See if the member added was our bot
+            if (members[i].id.includes(BOT_APP_ID)) {
+                var botmessage = new builder.Message()
+                    .address(msg.address)
+                    .text(`Hey! I'm Mr. Robot. Pleaseure to meet ya :)`);
+    
+                bot.send(botmessage, function(err) {});
+            }
         }
     });
 
