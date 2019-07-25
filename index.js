@@ -10,7 +10,7 @@ const restify = require('restify');
 const { BotFrameworkAdapter } = require('botbuilder');
 
 // This bot's main dialog.
-const { EchoBot } = require('./bot');
+const { MrRobot } = require('./bot');
 
 // Import required bot configuration.
 const ENV_FILE = path.join(__dirname, '.env');
@@ -42,7 +42,7 @@ adapter.onTurnError = async (context, error) => {
 };
 
 // Create the main dialog.
-const bot = new EchoBot();
+const bot = new MrRobot();
 
 // Listen for incoming requests.
 server.post('/api/messages', (req, res) => {
