@@ -65,7 +65,7 @@ module.exports.setup = (app) => {
                 timestamp: message.timestamp,
                 membersAdded: [ message.address.user, message.address.bot ],
             };
-            this.bot.receive(conversationUpdateEvent);
+            bot.receive(conversationUpdateEvent);
         } else {
             session.send(`beep boop.`);
         }
