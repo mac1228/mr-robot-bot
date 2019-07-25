@@ -27,27 +27,29 @@ module.exports.setup = (app) => {
         } else if (text === 'vote') {
             session.send(`Hmm who hasn't been a good operator?`);
         } else if (text === 'notify') {
-            var address =
-            {
-                channelId: chatInfo.channelId,
-                user: { id: chatInfo.from.id },
-                channelData: {
-                    tenant: {
-                        id: chatInfo.channelData.tenant.id
-                    }
-                },
-                bot:
-                {
-                    id: chatInfo.recipient.id,
-                    name: chatInfo.recipient.name
-                },
-                serviceUrl: chatInfo.serviceUrl,
-                useAuth: true
-            }
+            // var address =
+            // {
+            //     channelId: chatInfo.channelId,
+            //     user: { id: chatInfo.from.id },
+            //     channelData: {
+            //         tenant: {
+            //             id: chatInfo.channelData.tenant.id
+            //         }
+            //     },
+            //     bot:
+            //     {
+            //         id: chatInfo.recipient.id,
+            //         name: chatInfo.recipient.name
+            //     },
+            //     serviceUrl: chatInfo.serviceUrl,
+            //     useAuth: true
+            // }
 
-            let msg = new builder.Message().address(address);
-            msg.text('Hello, this is a notification');
-            bot.send(msg);
+            // let msg = new builder.Message().address(address);
+            // msg.text('Hello, this is a notification');
+            // bot.send(msg);
+            session.send('recipient: ' + chatInfo.recipient.id);
+            session.send('from: ' + chatInfo.from.id);
         } else if (text === 'reset') {
             // Forget everything we know about the user
             session.userData = {};
@@ -80,7 +82,7 @@ module.exports.setup = (app) => {
             if (members[i].id.includes(BOT_APP_ID)) {
                 var botmessage = new builder.Message()
                     .address(msg.address)
-                    .text(`Hey! I'm Mr. Robot. Pleaseure to meet ya :)`);
+                    .text(`Hey! I'm Mr. Robot. Pleasure to meet ya :)`);
 
                 bot.send(botmessage, function (err) { });
             }
