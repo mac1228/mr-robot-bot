@@ -48,8 +48,19 @@ module.exports.setup = (app) => {
             // let msg = new builder.Message().address(address);
             // msg.text('Hello, this is a notification');
             // bot.send(msg);
-            session.send('recipient: ' + chatInfo.recipient.id);
-            session.send('from: ' + chatInfo.from.id);
+
+            // session.send('recipient: ' + chatInfo.recipient.id);
+            // session.send('from: ' + chatInfo.from.id);
+
+            var conversationId = session.message.sourceEvent.conversation.id;
+            connector.fetchMembers((session.message.address).serviceUrl, conversationId, (err, result) => {
+                if (err) {
+                    session.endDialog('There is some error');
+                }
+                else {
+                    session.endDialog('%s', JSON.stringify(result));
+                }
+            });
         } else if (text === 'reset') {
             // Forget everything we know about the user
             session.userData = {};
@@ -65,7 +76,7 @@ module.exports.setup = (app) => {
                 user: message.user,
                 address: message.address,
                 timestamp: message.timestamp,
-                membersAdded: [ message.address.user, message.address.bot ],
+                membersAdded: [message.address.user, message.address.bot],
             };
             bot.receive(conversationUpdateEvent);
         } else {
