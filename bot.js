@@ -8,9 +8,9 @@ class MrRobot extends ActivityHandler {
         super();
         // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
         this.onMessage(async (context, next) => {
-            const text = context.activity.text
+            const text = context.activity.text.trim();
             if (text === 'join') {
-                await context.sendActivity(`Oh! So you'd like to become an operator. Thank you so much for helping me out.'`);
+                await context.sendActivity(`Oh! So you'd like to become an operator. Thank you so much for helping me out :)`);
             } else if (text === 'leave') {
                 await context.sendActivity(`Awww...see ya next time!'`);
             } else if (text === 'vote') {
