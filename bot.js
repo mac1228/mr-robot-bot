@@ -2,12 +2,21 @@
 // Licensed under the MIT License.
 
 const { ActivityHandler } = require('botbuilder');
+// const teams = require('botbuilder-teams');
+
 
 class MrRobot extends ActivityHandler {
     constructor() {
         super();
+
+        // const chat  = new teams.TeamsChatConnector();
+
         // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
         this.onMessage(async (context, next) => {
+            const reference = context.getConversationReference(context.request);
+
+            await context.sendActivity(reference);
+
             const text = context.activity.text.trim();
             if (text === 'join') {
                 await context.sendActivity(`Oh! So you'd like to become an operator. Thank you so much for helping me out :)`);
