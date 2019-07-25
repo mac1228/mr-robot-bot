@@ -4,6 +4,7 @@ module.exports.setup = (app) => {
     const builder = require('botbuilder');
     const teams = require('botbuilder-teams');
     const BOT_APP_ID = process.env.MicrosoftAppId;
+    let chatInfo;
 
     // Create a connector to handle the conversations
     const connector = new teams.TeamsChatConnector({
@@ -14,7 +15,7 @@ module.exports.setup = (app) => {
 
     const inMemoryBotStorage = new builder.MemoryBotStorage();
 
-    const bot = new builder.UniversalBot(connector, function (session) {
+    const bot = new builder.UniversalBot(connector, (session) => {
 
         var text = teams.TeamsMessage.getTextWithoutMentions(session.message);
 
@@ -24,6 +25,34 @@ module.exports.setup = (app) => {
             session.send(`Awww...see ya next time!`);
         } else if (text === 'vote') {
             session.send(`Hmm who hasn't been a good operator?`);
+        } else if (text === 'notify') {
+            var address =
+            {
+                channelId: chatInfo.channelId,
+                user: { id: chatInfo.from.id },
+                channelData: {
+                    tenant: {
+                        id: chatInfo.channelData.tenant.id
+                    }
+                },
+                bot:
+                {
+                    id: chatInfo.recipient.id,
+                    name: chatInfo.recipient.name
+                },
+                serviceUrl: chatInfo.serviceUrl,
+                useAuth: true
+            }
+
+            var msg = new builder.Message().address(address);
+            msg.text('Hello, this is a notification');
+            bot.send(msg);
+        } else if (text === 'reset') {
+            // Forget everything we know about the user
+            session.userData = {};
+            session.conversationData = {};
+            session.privateConversationData = {};
+            session.save().sendBatch();
         } else {
             session.send(`beep boop.`);
         }
@@ -33,13 +62,14 @@ module.exports.setup = (app) => {
         var members = msg.membersAdded;
         // Loop through all members that were just added to the team
         for (var i = 0; i < members.length; i++) {
+            chatInfo = msg;
             // See if the member added was our bot
             if (members[i].id.includes(BOT_APP_ID)) {
                 var botmessage = new builder.Message()
                     .address(msg.address)
                     .text(`Hey! I'm Mr. Robot. Pleaseure to meet ya :)`);
-    
-                bot.send(botmessage, function(err) {});
+
+                bot.send(botmessage, function (err) { });
             }
         }
     });
