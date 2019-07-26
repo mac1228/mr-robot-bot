@@ -1,7 +1,7 @@
-const { ActivityHandler, TurnContext, MemoryBotStorage } = require('botbuilder');
+const { ActivityHandler, TurnContext, MemoryStorage } = require('botbuilder');
 const teams = require('botbuilder-teams')
 
-const storage = new MemoryBotStorage();
+const storage = new MemoryStorage();
 
 class MrRobot extends ActivityHandler {
     constructor() {
