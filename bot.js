@@ -1,4 +1,5 @@
-const { ActivityHandler } = require('botbuilder');
+const { ActivityHandler, TurnContext } = require('botbuilder');
+const teams = require('botbuilder-teams')
 
 class MrRobot extends ActivityHandler {
     constructor() {
@@ -6,17 +7,23 @@ class MrRobot extends ActivityHandler {
 
         // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
         this.onMessage(async (context, next) => {
-            const text = context.activity.text.trim();
+            const teamsCtx = teams.TeamsContext.from(context);
+            const text = teamsCtx.getActivityTextWithoutMentions();
+
             if (text === 'join') {
                 await context.sendActivity(`Oh! So you'd like to become an operator. Thank you so much for helping me out :)`);
             } else if (text === 'leave') {
-                await context.sendActivity(`Awww...see ya next time!'`);
+                await context.sendActivity(`Awww...see ya next time!`);
             } else if (text === 'vote') {
-                await context.sendActivity(`Hmm who hasn't been a good operator?'`);
+                await context.sendActivity(`Hmm who hasn't been a good operator?`);
+            } else if (text === 'me') {
+                const ref = TurnContext.getConversationReference(context.activity);
+                const userName = ref.user.name;
+                await context.sendActivity(`Hello ${userName}`);
             } else {
-                await context.sendActivity(`beep boop.'`);
+                await context.sendActivity(`beep boop.`);
             }
-            
+
             // By calling next() you ensure that the next BotHandler is run.
             await next();
         });
