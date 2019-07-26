@@ -1,5 +1,7 @@
-const { ActivityHandler, TurnContext } = require('botbuilder');
+const { ActivityHandler, TurnContext, MemoryBotStorage } = require('botbuilder');
 const teams = require('botbuilder-teams')
+
+const storage = new MemoryBotStorage();
 
 class MrRobot extends ActivityHandler {
     constructor() {
@@ -20,6 +22,8 @@ class MrRobot extends ActivityHandler {
                 const ref = TurnContext.getConversationReference(context.activity);
                 const userName = ref.user.name;
                 await context.sendActivity(`Hello ${userName}`);
+            } else if (text === 'store') {
+                logMessageText(storage, context)
             } else {
                 await context.sendActivity(`beep boop.`);
             }
@@ -38,6 +42,51 @@ class MrRobot extends ActivityHandler {
             // By calling next() you ensure that the next BotHandler is run.
             await next();
         });
+    }
+}
+
+// This function stores new user messages. Creates new utterance log if none exists.
+async function logMessageText(storage, turnContext) {
+    let utterance = turnContext.activity.text;
+    // debugger;
+    try {
+        // Read from the storage.
+        let storeItems = await storage.read(["UtteranceLogJS"])
+        // Check the result.
+        var UtteranceLogJS = storeItems["UtteranceLogJS"];
+        if (typeof (UtteranceLogJS) != 'undefined') {
+            // The log exists so we can write to it.
+            storeItems["UtteranceLogJS"].turnNumber++;
+            storeItems["UtteranceLogJS"].UtteranceList.push(utterance);
+            // Gather info for user message.
+            var storedString = storeItems.UtteranceLogJS.UtteranceList.toString();
+            var numStored = storeItems.UtteranceLogJS.turnNumber;
+
+            try {
+                await storage.write(storeItems)
+                turnContext.sendActivity(`${numStored}: The list is now: ${storedString}`);
+            } catch (err) {
+                turnContext.sendActivity(`Write failed of UtteranceLogJS: ${err}`);
+            }
+        }
+        else {
+            turnContext.sendActivity(`Creating and saving new utterance log`);
+            var turnNumber = 1;
+            storeItems["UtteranceLogJS"] = { UtteranceList: [`${utterance}`], "eTag": "*", turnNumber }
+            // Gather info for user message.
+            var storedString = storeItems.UtteranceLogJS.UtteranceList.toString();
+            var numStored = storeItems.UtteranceLogJS.turnNumber;
+
+            try {
+                await storage.write(storeItems)
+                turnContext.sendActivity(`${numStored}: The list is now: ${storedString}`);
+            } catch (err) {
+                turnContext.sendActivity(`Write failed: ${err}`);
+            }
+        }
+    }
+    catch (err) {
+        turnContext.sendActivity(`Read rejected. ${err}`);
     }
 }
 
