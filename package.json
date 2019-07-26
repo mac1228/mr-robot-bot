@@ -17,7 +17,7 @@
     },
     "dependencies": {
         "botbuilder": "^3.11.0",
-        "botbuilder-teams": "^0.2.7",
+        "botbuilder-teams": "^4.0.0-beta1",
         "dotenv": "^7.0.0",
         "restify": "~8.3.3"
     },

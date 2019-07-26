@@ -1,108 +1,70 @@
-'use strict';
+const { ActivityHandler, TurnContext } = require('botbuilder');
+const teams = require('botbuilder-teams');
+// const teams = require('botbuilder-teams');
 
-module.exports.setup = (app) => {
-    const builder = require('botbuilder');
-    const teams = require('botbuilder-teams');
-    const BOT_APP_ID = process.env.MicrosoftAppId;
-    let chatInfo;
+class MrRobot extends ActivityHandler {
+    constructor() {
+        super();
 
-    // Create a connector to handle the conversations
-    const connector = new teams.TeamsChatConnector({
-        appId: BOT_APP_ID,
-        appPassword: process.env.MicrosoftAppPassword,
-        openIdMetadata: process.env.BotOpenIdMetadata
-    });
+        // const chat  = new teams.TeamsChatConnector();
 
-    const inMemoryBotStorage = new builder.MemoryBotStorage();
+        // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
+        this.onMessage(async (context, next) => {
+            // const reference = context.getConversationReference(context.request);
 
-    const bot = new builder.UniversalBot(connector, (session) => {
+            // await context.sendActivity(reference);
 
-        let message = session.message;
-        let text = teams.TeamsMessage.getTextWithoutMentions(message);
+            const teamsCtx = teams.TeamsContext.from(context);
+            const text = teamsCtx.getActivityTextWithoutMentions();
 
-        if (text === 'join') {
-            session.send(`Oh! So you'd like to become an operator. Thank you so much for helping me out :)`);
-        } else if (text === 'leave') {
-            session.send(`Awww...see ya next time!`);
-        } else if (text === 'vote') {
-            session.send(`Hmm who hasn't been a good operator?`);
-        } else if (text === 'notify') {
-            // var address =
-            // {
-            //     channelId: chatInfo.channelId,
-            //     user: { id: chatInfo.from.id },
-            //     channelData: {
-            //         tenant: {
-            //             id: chatInfo.channelData.tenant.id
-            //         }
-            //     },
-            //     bot:
-            //     {
-            //         id: chatInfo.recipient.id,
-            //         name: chatInfo.recipient.name
-            //     },
-            //     serviceUrl: chatInfo.serviceUrl,
-            //     useAuth: true
-            // }
+            if (text === 'join') {
+                await context.sendActivity(`Oh! So you'd like to become an operator. Thank you so much for helping me out :)`);
+            } else if (text === 'leave') {
+                await context.sendActivity(`Awww...see ya next time!`);
+            } else if (text === 'vote') {
+                await context.sendActivity(`Hmm who hasn't been a good operator?`);
+            } else if (text === 'reset') {
+                await context.sendActivity(`You haven't set up this command yet`);
+                // Forget everything we know about the user
+                // session.userData = {};
+                // session.conversationData = {};
+                // session.privateConversationData = {};
+                // session.save().sendBatch();
 
-            // let msg = new builder.Message().address(address);
-            // msg.text('Hello, this is a notification');
-            // bot.send(msg);
-
-            // session.send('recipient: ' + chatInfo.recipient.id);
-            // session.send('from: ' + chatInfo.from.id);
-
-            var conversationId = session.message.sourceEvent.conversation.id;
-            connector.fetchMembers((session.message.address).serviceUrl, conversationId, (err, result) => {
-                if (err) {
-                    session.endDialog('There is some error');
-                }
-                else {
-                    session.endDialog('%s', JSON.stringify(result));
-                }
-            });
-        } else if (text === 'reset') {
-            // Forget everything we know about the user
-            session.userData = {};
-            session.conversationData = {};
-            session.privateConversationData = {};
-            session.save().sendBatch();
-
-            let conversationUpdateEvent = {
-                type: "conversationUpdate",
-                agent: message.agent,
-                source: message.source,
-                sourceEvent: message.sourceEvent,
-                user: message.user,
-                address: message.address,
-                timestamp: message.timestamp,
-                membersAdded: [message.address.user, message.address.bot],
-            };
-            bot.receive(conversationUpdateEvent);
-        } else {
-            session.send(`beep boop.`);
-        }
-    });
-
-    bot.on('conversationUpdate', (msg) => {
-        var members = msg.membersAdded;
-        // Loop through all members that were just added to the team
-        for (var i = 0; i < members.length; i++) {
-            chatInfo = msg;
-            // See if the member added was our bot
-            if (members[i].id.includes(BOT_APP_ID)) {
-                var botmessage = new builder.Message()
-                    .address(msg.address)
-                    .text(`Hey! I'm Mr. Robot. Pleasure to meet ya :)`);
-
-                bot.send(botmessage, function (err) { });
+                // let conversationUpdateEvent = {
+                //     type: "conversationUpdate",
+                //     agent: message.agent,
+                //     source: message.source,
+                //     sourceEvent: message.sourceEvent,
+                //     user: message.user,
+                //     address: message.address,
+                //     timestamp: message.timestamp,
+                //     membersAdded: [message.address.user, message.address.bot],
+                // };
+                // bot.receive(conversationUpdateEvent);
+            } else if (text === 'me') {
+                const ref = TurnContext.getConversationReference(context.activity);
+                const userName = ref.user.name;
+                await context.sendActivity(`Hello ${userName}`);
+            } else {
+                await context.sendActivity(`beep boop.'`);
             }
-        }
-    });
 
-    bot.set('storage', inMemoryBotStorage);
+            // By calling next() you ensure that the next BotHandler is run.
+            await next();
+        });
 
-    // Setup an endpoint on the router for the bot to listen.
-    // NOTE: This endpoint cannot be changed and must be api/messages
-    app.post('/api/messages', connector.listen());
-};
+        this.onMembersAdded(async (context, next) => {
+            const membersAdded = context.activity.membersAdded;
+            for (let cnt = 0; cnt < membersAdded.length; ++cnt) {
+                if (membersAdded[cnt].id !== context.activity.recipient.id) {
+                    await context.sendActivity(`Hey! I'm Mr. Robot. Pleaseure to meet ya :)`);
+                }
+            }
+            // By calling next() you ensure that the next BotHandler is run.
+            await next();
+        });
+    }
+}
+
+module.exports.MrRobot = MrRobot;
