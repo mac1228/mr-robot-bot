@@ -1,8 +1,8 @@
 {
-    "name": "echobot",
+    "name": "mr-robot",
     "version": "1.0.0",
-    "description": "Bot Builder v4 echo bot sample",
-    "author": "Microsoft",
+    "description": "Mr. Robot Bot",
+    "author": "Michael Curd",
     "license": "MIT",
     "main": "index.js",
     "scripts": {
@@ -19,6 +19,7 @@
         "botbuilder": "~4.5.1",
         "botbuilder-teams": "^4.0.0-beta1",
         "dotenv": "^7.0.0",
+        "ms-rest-js": "^1.0.1",
         "restify": "~8.3.3"
     },
     "devDependencies": {
