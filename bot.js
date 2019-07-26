@@ -32,7 +32,7 @@ class MrRobot extends ActivityHandler {
             const membersAdded = context.activity.membersAdded;
             for (let cnt = 0; cnt < membersAdded.length; ++cnt) {
                 if (membersAdded[cnt].id !== context.activity.recipient.id) {
-                    await context.sendActivity(`Hey! I'm Mr. Robot. Pleaseure to meet ya :)`);
+                    await context.sendActivity(`Hey! I'm Mr. Robot. Pleasure to meet ya :)`);
                 }
             }
             // By calling next() you ensure that the next BotHandler is run.
