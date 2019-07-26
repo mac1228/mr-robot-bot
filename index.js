@@ -4,7 +4,8 @@ const restify = require('restify');
 
 // Import required bot services.
 // See https://aka.ms/bot-services to learn more about the different parts of a bot.
-const { BotFrameworkAdapter } = require('botbuilder');
+// const { BotFrameworkAdapter } = require('botbuilder');
+const teams = require('botbuilder-teams')
 
 // This bot's main dialog.
 const { MrRobot } = require('./bot');
@@ -16,24 +17,36 @@ dotenv.config({ path: ENV_FILE });
 // Create HTTP server
 const server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, () => {
-    console.log(`\n${ server.name } listening to ${ server.url }`);
+    console.log(`\n${server.name} listening to ${server.url}`);
     console.log(`\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator`);
     console.log(`\nTo talk to your bot, open the emulator select "Open Bot"`);
 });
 
 // Create adapter.
 // See https://aka.ms/about-bot-adapter to learn more about how bots work.
-const adapter = new BotFrameworkAdapter({
+// const adapter = new BotFrameworkAdapter({
+//     appId: process.env.MicrosoftAppId,
+//     appPassword: process.env.MicrosoftAppPassword,
+//     channelService: process.env.ChannelService,
+//     openIdMetadata: process.env.BotOpenIdMetadata
+// });
+
+const botSetting = {
     appId: process.env.MicrosoftAppId,
     appPassword: process.env.MicrosoftAppPassword,
     channelService: process.env.ChannelService,
     openIdMetadata: process.env.BotOpenIdMetadata
-});
+};
+
+const adapter = new teams.TeamsAdapter(botSetting);
+
+// Use Teams middleware
+adapter.use(new teams.TeamsMiddleware());
 
 // Catch-all for errors.
 adapter.onTurnError = async (context, error) => {
     // This check writes out errors to console log .vs. app insights.
-    console.error(`\n [onTurnError]: ${ error }`);
+    console.error(`\n [onTurnError]: ${error}`);
     // Send a message to the user
     await context.sendActivity(`Oops. Something went wrong!`);
 };

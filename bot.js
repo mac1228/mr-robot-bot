@@ -7,10 +7,8 @@ class MrRobot extends ActivityHandler {
 
         // See https://aka.ms/about-bot-activity-message to learn more about the message and other activity types.
         this.onMessage(async (context, next) => {
-            // const teamsCtx = teams.TeamsContext.from(context);
-            // const text = teamsCtx.getActivityTextWithoutMentions();
-
-            const text = context.activity.text.trim();
+            const teamsCtx = teams.TeamsContext.from(context);
+            const text = teamsCtx.getActivityTextWithoutMentions();
 
             if (text === 'join') {
                 await context.sendActivity(`Oh! So you'd like to become an operator. Thank you so much for helping me out :)`);
