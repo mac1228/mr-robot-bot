@@ -1,5 +1,5 @@
 const { ActivityHandler, TurnContext, MemoryStorage } = require('botbuilder');
-const teams = require('botbuilder-teams')
+const teams = require('botbuilder-teams');
 
 const storage = new MemoryStorage();
 
