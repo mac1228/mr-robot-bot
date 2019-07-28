@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 import * as restify from 'restify';
-import { MrRobot } from './bot';
+import { MrRobot } from '../bot';
 import * as teams from 'botbuilder-teams';
 
 const ENV_FILE = path.join(__dirname, '.env');

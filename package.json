@@ -5,7 +5,7 @@
     "author": "Michael Curd",
     "license": "MIT",
     "scripts": {
-        "start": "node ./dist/app.js"
+        "start": "node index.js"
     },
     "repository": {
         "type": "git",
