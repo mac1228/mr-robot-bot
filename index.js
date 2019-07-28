@@ -2,10 +2,6 @@ const dotenv = require('dotenv');
 const path = require('path');
 const restify = require('restify');
 const { MrRobot } = require('./bot');
-
-// See https://aka.ms/bot-services to learn more about the different parts of a bot.
-// See https://aka.ms/about-bot-adapter to learn more about how bots work.
-
 const teams = require('botbuilder-teams')
 
 // Import required bot configuration.
@@ -16,8 +12,6 @@ dotenv.config({ path: ENV_FILE });
 const server = restify.createServer();
 server.listen(process.env.port || process.env.PORT || 3978, () => {
     console.log(`\n${server.name} listening to ${server.url}`);
-    console.log(`\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator`);
-    console.log(`\nTo talk to your bot, open the emulator select "Open Bot"`);
 });
 
 const botSetting = {
