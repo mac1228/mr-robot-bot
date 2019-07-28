@@ -11,6 +11,7 @@ class MrRobot extends ActivityHandler {
         this.onMessage(async (context, next) => {
             const teamsCtx = teams.TeamsContext.from(context);
             const text = teamsCtx.getActivityTextWithoutMentions().trim();
+            const tenantId = teamsCtx.tenant.id;
 
             if (text === 'join') {
                 await context.sendActivity(`Oh! So you'd like to become an operator. Thank you so much for helping me out :)`);
@@ -24,7 +25,10 @@ class MrRobot extends ActivityHandler {
                 await context.sendActivity(`Hello ${userName}`);
             } else if (text === 'store') {
                 logMessageText(storage, context)
-            } else {
+            } else if (text === 'tenant') {
+                await context.sendActivity(tenantId);
+            } 
+            else {
                 await context.sendActivity(`beep boop.`);
             }
 
