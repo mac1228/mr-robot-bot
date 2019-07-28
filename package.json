@@ -5,8 +5,7 @@
     "author": "Michael Curd",
     "license": "MIT",
     "scripts": {
-        "start": "npm run build:live",
-        "build:live": "nodemon --ignore './data' --exec node --inspect=5566 -r ts-node/register ./src/app.ts"
+        "start": "nodemon --ignore './data' --exec node --inspect=5566 -r ts-node/register ./src/app.ts"
     },
     "repository": {
         "type": "git",
