@@ -5,7 +5,7 @@
     "author": "Michael Curd",
     "license": "MIT",
     "scripts": {
-        "start": "nodemon --ignore './data' --exec node --inspect=5566 -r ts-node/register ./src/app.ts"
+        "start": "node ./dist/app.js"
     },
     "repository": {
         "type": "git",
@@ -16,8 +16,7 @@
         "botbuilder-teams": "^4.0.0-beta1",
         "dotenv": "^7.0.0",
         "ms-rest-js": "^1.0.1",
-        "restify": "~8.3.3",
-        "ts-node": "^8.3.0"
+        "restify": "~8.3.3"
     },
     "devDependencies": {
         "@types/dotenv": "^6.1.1",
@@ -28,6 +27,8 @@
         "eslint-plugin-node": "^8.0.1",
         "eslint-plugin-promise": "^4.0.1",
         "eslint-plugin-standard": "^4.0.0",
+        "gulp": "^4.0.2",
+        "gulp-typescript": "^5.0.1",
         "nodemon": "^1.19.1",
         "typescript": "^3.5.3"
     }

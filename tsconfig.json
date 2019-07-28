@@ -1,16 +1,11 @@
 {
+  "files": [
+    "app.ts",
+    "bot.ts"
+  ],
   "compilerOptions": {
-    "target": "ES2015",
-    "module": "commonjs",
-    "declaration": true,
-    "sourceMap": true,
-    "outDir": "./lib",
-    "rootDir": "./src",
-    "types": [
-      "node"
-    ]
-  },
-  "include": [
-    "src/**/*"
-  ]
+    "noImplicitAny": true,
+    "target": "es2016",
+    "module": "commonjs"
+  }
 }
