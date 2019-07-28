@@ -86,6 +86,13 @@ goto :EOF
 :: ----------
 
 :Deployment
+echo Execute Gulp
+:: 4. Execute Gulp
+IF EXIST "%DEPLOYMENT_SOURCE%\gulpfile.js" (
+    call .\node_modules\.bin\gulp
+    IF !ERRORLEVEL! NEQ 0 goto error
+)
+
 echo Handling node.js deployment.
 
 :: 1. KuduSync
@@ -103,13 +110,6 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   call :ExecuteCmd !NPM_CMD! install --production
   IF !ERRORLEVEL! NEQ 0 goto error
   popd
-)
-
-echo Execute Gulp
-:: 4. Execute Gulp
-IF EXIST "%DEPLOYMENT_SOURCE%\gulpfile.js" (
-    call .\node_modules\.bin\gulp
-    IF !ERRORLEVEL! NEQ 0 goto error
 )
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
