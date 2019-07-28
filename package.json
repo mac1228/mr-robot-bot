@@ -5,7 +5,7 @@
     "author": "Michael Curd",
     "license": "MIT",
     "scripts": {
-        "start": "node dist/index.js",
+        "start": "node index.js",
         "watch": "nodemon ./index.js",
         "lint": "eslint .",
         "test": "echo \"Error: no test specified\" && exit 1"
@@ -22,17 +22,12 @@
         "restify": "~8.3.3"
     },
     "devDependencies": {
-        "@types/dotenv": "^6.1.1",
-        "@types/restify": "^7.2.12",
         "eslint": "^5.13.0",
         "eslint-config-standard": "^12.0.0",
         "eslint-plugin-import": "^2.16.0",
         "eslint-plugin-node": "^8.0.1",
         "eslint-plugin-promise": "^4.0.1",
         "eslint-plugin-standard": "^4.0.0",
-        "gulp": "^4.0.2",
-        "gulp-typescript": "^5.0.1",
-        "nodemon": "^1.19.1",
-        "typescript": "^3.5.3"
+        "nodemon": "^1.19.1"
     }
 }

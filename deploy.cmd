@@ -105,13 +105,6 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   popd
 )
 
-echo Execute Gulp
-:: 4. Execute Gulp
-IF EXIST "%DEPLOYMENT_SOURCE%\gulpfile.js" (
-    call .\node_modules\.bin\gulp
-    IF !ERRORLEVEL! NEQ 0 goto error
-)
-
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 goto end
 
