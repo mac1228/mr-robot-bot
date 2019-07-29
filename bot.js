@@ -1,14 +1,7 @@
 const { ActivityHandler, TurnContext, MemoryStorage } = require('botbuilder');
 const teams = require('botbuilder-teams');
-const { CosmosDbStorage } = require("botbuilder-azure");
 
 const storage = new MemoryStorage();
-// var storage = new CosmosDbStorage({
-//     serviceEndpoint: process.env.DB_SERVICE_ENDPOINT, 
-//     authKey: process.env.AUTH_KEY, 
-//     databaseId: process.env.DATABASE,
-//     collectionId: process.env.COLLECTION
-// })
 
 class MrRobot extends ActivityHandler {
     constructor() {
@@ -34,7 +27,7 @@ class MrRobot extends ActivityHandler {
                 logMessageText(storage, context)
             } else if (text === 'tenant') {
                 await context.sendActivity(tenantId);
-            } 
+            }
             else {
                 await context.sendActivity(`beep boop.`);
             }
@@ -75,13 +68,13 @@ async function logMessageText(storage, turnContext) {
 
             try {
                 await storage.write(storeItems)
-                await turnContext.sendActivity(`${numStored}: The list is now: ${storedString}`);
+                turnContext.sendActivity(`${numStored}: The list is now: ${storedString}`);
             } catch (err) {
-                await turnContext.sendActivity(`Write failed of UtteranceLogJS: ${err}`);
+                turnContext.sendActivity(`Write failed of UtteranceLogJS: ${err}`);
             }
         }
         else {
-            await turnContext.sendActivity(`Creating and saving new utterance log`);
+            turnContext.sendActivity(`Creating and saving new utterance log`);
             var turnNumber = 1;
             storeItems["UtteranceLogJS"] = { UtteranceList: [`${utterance}`], "eTag": "*", turnNumber }
             // Gather info for user message.
@@ -90,14 +83,14 @@ async function logMessageText(storage, turnContext) {
 
             try {
                 await storage.write(storeItems)
-                await turnContext.sendActivity(`${numStored}: The list is now: ${storedString}`);
+                turnContext.sendActivity(`${numStored}: The list is now: ${storedString}`);
             } catch (err) {
-                await turnContext.sendActivity(`Write failed: ${err}`);
+                turnContext.sendActivity(`Write failed: ${err}`);
             }
         }
     }
     catch (err) {
-        await turnContext.sendActivity(`Read rejected. ${err}`);
+        turnContext.sendActivity(`Read rejected. ${err}`);
     }
 }
 
