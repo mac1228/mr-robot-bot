@@ -2,12 +2,13 @@ const { ActivityHandler, TurnContext, MemoryStorage } = require('botbuilder');
 const teams = require('botbuilder-teams');
 const { CosmosDbStorage } = require("botbuilder-azure");
 
-var storage = new CosmosDbStorage({
-    serviceEndpoint: process.env.DB_SERVICE_ENDPOINT, 
-    authKey: process.env.AUTH_KEY, 
-    databaseId: process.env.DATABASE,
-    collectionId: process.env.COLLECTION
-})
+const storage = new MemoryStorage();
+// var storage = new CosmosDbStorage({
+//     serviceEndpoint: process.env.DB_SERVICE_ENDPOINT, 
+//     authKey: process.env.AUTH_KEY, 
+//     databaseId: process.env.DATABASE,
+//     collectionId: process.env.COLLECTION
+// })
 
 class MrRobot extends ActivityHandler {
     constructor() {
