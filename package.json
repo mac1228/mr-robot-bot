@@ -13,6 +13,7 @@
     },
     "dependencies": {
         "botbuilder": "~4.5.1",
+        "botbuilder-azure": "^4.5.3",
         "botbuilder-teams": "^4.0.0-beta1",
         "dotenv": "^7.0.0",
         "ms-rest-js": "^1.0.1",
