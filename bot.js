@@ -74,13 +74,13 @@ async function logMessageText(storage, turnContext) {
 
             try {
                 await storage.write(storeItems)
-                turnContext.sendActivity(`${numStored}: The list is now: ${storedString}`);
+                await turnContext.sendActivity(`${numStored}: The list is now: ${storedString}`);
             } catch (err) {
-                turnContext.sendActivity(`Write failed of UtteranceLogJS: ${err}`);
+                await turnContext.sendActivity(`Write failed of UtteranceLogJS: ${err}`);
             }
         }
         else {
-            turnContext.sendActivity(`Creating and saving new utterance log`);
+            await turnContext.sendActivity(`Creating and saving new utterance log`);
             var turnNumber = 1;
             storeItems["UtteranceLogJS"] = { UtteranceList: [`${utterance}`], "eTag": "*", turnNumber }
             // Gather info for user message.
@@ -89,14 +89,14 @@ async function logMessageText(storage, turnContext) {
 
             try {
                 await storage.write(storeItems)
-                turnContext.sendActivity(`${numStored}: The list is now: ${storedString}`);
+                await turnContext.sendActivity(`${numStored}: The list is now: ${storedString}`);
             } catch (err) {
-                turnContext.sendActivity(`Write failed: ${err}`);
+                await turnContext.sendActivity(`Write failed: ${err}`);
             }
         }
     }
     catch (err) {
-        turnContext.sendActivity(`Read rejected. ${err}`);
+        await turnContext.sendActivity(`Read rejected. ${err}`);
     }
 }
 
